@@ -1,4 +1,3 @@
-// Arquivo: read_csv.h
 #ifndef READ_CSV_H
 #define READ_CSV_H
 
@@ -6,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <stdexcept>
 #include <cstdlib>
 
 using namespace std;
@@ -16,22 +14,16 @@ class CSVReader
 private:
     string filename; // Nome do arquivo CSV
     char delimiter;  // Delimitador usado para separar os valores
-    int maxRows;     // Número máximo de linhas permitidas
-    int maxCols;     // Número máximo de colunas permitidas
-
-    // Array fixo para armazenar os dados do arquivo
-    string data[100][100];
+    string data[100][100]; // Array para armazenar os dados do arquivo
     int currentRows; // Número de linhas lidas
     int currentCols; // Número de colunas lidas
 
 public:
-    // Construtor para inicializar o leitor com as configurações desejadas
-    CSVReader(string file, char delim = ',', int maxRows = 100, int maxCols = 100)
+    // Construtor para inicializar o leitor
+    CSVReader(string file, char delim = ',')
     {
         filename = file;
         delimiter = delim;
-        this->maxRows = maxRows;
-        this->maxCols = maxCols;
         currentRows = 0;
         currentCols = 0;
     }
@@ -39,9 +31,8 @@ public:
     // Método para ler os dados do arquivo CSV
     bool readData()
     {
-        // Tenta abrir o arquivo com conversão explícita para const char*
-        ifstream file(filename.c_str());
-        if (!file.is_open())
+        ifstream file(filename.c_str()); // Abre o arquivo
+        if (!file.is_open()) // Verifica se o arquivo foi aberto corretamente
         {
             cout << "Erro ao abrir o arquivo: " << filename << endl;
             return false;
@@ -51,28 +42,25 @@ public:
         int row = 0;
 
         // Lê o arquivo linha por linha
-        while (getline(file, line) && row < maxRows)
+        while (getline(file, line) && row < 100)
         {
-            stringstream ss(line); // Converte a linha para um stream
+            stringstream ss(line); // Transforma a linha em um stream
             string cell;
             int col = 0;
 
-            // Lê cada célula da linha separada pelo delimitador
-            while (getline(ss, cell, delimiter) && col < maxCols)
+            // Lê cada célula da linha
+            while (getline(ss, cell, delimiter) && col < 100)
             {
-                data[row][col] = cell; // Armazena o valor no array
+                data[row][col] = cell; // Armazena no array
                 col++;
             }
 
-            if (col > currentCols)
-            {
-                currentCols = col; // Atualiza o número de colunas lidas
-            }
+            if (col > currentCols) currentCols = col; // Atualiza o número de colunas
             row++;
         }
 
         currentRows = row; // Atualiza o número de linhas lidas
-        file.close();      // Fecha o arquivo
+        file.close(); // Fecha o arquivo
         return true;
     }
 
@@ -89,39 +77,22 @@ public:
         }
     }
 
-    // Método para retornar o endereço do array bidimensional
+    // Método para retornar os dados como um array
     string (*getData())[100]
     {
         return data;
     }
 
-    // Método para converter string para int
-    int stringToInt(string& str)
+    // Método para converter string para inteiro
+    int stringToInt(string str)
     {
-        char *end;
-        long value = strtol(str.c_str(), &end, 10); // Base 10 para números decimais
-
-        if (*end != '\0')
-        {
-            cerr << "Erro: Não foi possível converter '" << str << "' para int." << endl;
-            return 0; // Valor padrão em caso de erro
-        }
-
-        return static_cast<int>(value);
+        return atoi(str.c_str()); // Usa a função atoi para conversão
     }
 
     // Método para converter string para float
-    float stringToFloat(const string &str)
+    float stringToFloat(string str)
     {
-        try
-        {
-            return stof(str);
-        }
-        catch (const invalid_argument &e)
-        {
-            cout << "Erro: Não foi possível converter '" << str << "' para float." << endl;
-            return 0.0f; // Valor padrão em caso de erro
-        }
+        return atof(str.c_str()); // Usa a função atof para conversão
     }
 };
 

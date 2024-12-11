@@ -9,8 +9,8 @@ int main() {
     string file2 = "label-dataset1.csv";
 
     // Criando instâncias da classe CSVReader para os dois arquivos
-    CSVReader reader1(file1, ',', 100, 100);
-    CSVReader reader2(file2, ',', 100, 100);
+    CSVReader reader1(file1, ',');
+    CSVReader reader2(file2, ',');
 
     // Lendo e imprimindo o primeiro arquivo
     cout << "Lendo o arquivo: " << file1 << endl;
