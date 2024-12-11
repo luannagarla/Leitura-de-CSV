@@ -6,22 +6,25 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <stdexcept>
+
+using namespace std;
 
 class CSVReader {
 private:
-    std::string filename; // Nome do arquivo CSV
-    char delimiter;       // Delimitador usado para separar os valores
-    int maxRows;          // Número máximo de linhas permitidas
-    int maxCols;          // Número máximo de colunas permitidas
+    string filename; // Nome do arquivo CSV
+    char delimiter;  // Delimitador usado para separar os valores
+    int maxRows;     // Número máximo de linhas permitidas
+    int maxCols;     // Número máximo de colunas permitidas
 
     // Array fixo para armazenar os dados do arquivo
-    std::string data[100][100];
-    int currentRows;      // Número de linhas lidas
-    int currentCols;      // Número de colunas lidas
+    string data[100][100];
+    int currentRows; // Número de linhas lidas
+    int currentCols; // Número de colunas lidas
 
 public:
     // Construtor para inicializar o leitor com as configurações desejadas
-    CSVReader(std::string file, char delim = ',', int maxRows = 100, int maxCols = 100) {
+    CSVReader(string file, char delim = ',', int maxRows = 100, int maxCols = 100) {
         filename = file;
         delimiter = delim;
         this->maxRows = maxRows;
@@ -33,19 +36,19 @@ public:
     // Método para ler os dados do arquivo CSV
     bool readData() {
         // Tenta abrir o arquivo com conversão explícita para const char*
-        std::ifstream file(filename.c_str());
+        ifstream file(filename.c_str());
         if (!file.is_open()) {
-            std::cout << "Erro ao abrir o arquivo: " << filename << std::endl;
+            cout << "Erro ao abrir o arquivo: " << filename << endl;
             return false;
         }
 
-        std::string line;
+        string line;
         int row = 0;
 
         // Lê o arquivo linha por linha
         while (getline(file, line) && row < maxRows) {
-            std::stringstream ss(line); // Converte a linha para um stream
-            std::string cell;
+            stringstream ss(line); // Converte a linha para um stream
+            string cell;
             int col = 0;
 
             // Lê cada célula da linha separada pelo delimitador
@@ -69,15 +72,35 @@ public:
     void printData() {
         for (int i = 0; i < currentRows; i++) {
             for (int j = 0; j < currentCols; j++) {
-                std::cout << data[i][j] << " ";
+                cout << data[i][j] << " ";
             }
-            std::cout << std::endl;
+            cout << endl;
         }
     }
 
     // Método para retornar o endereço do array bidimensional
-    std::string (*getData())[100] {
+    string (*getData())[100] {
         return data;
+    }
+
+    // Método para converter string para int
+    int stringToInt(const string& str) {
+        try {
+            return stoi(str);
+        } catch (const invalid_argument& e) {
+            cout << "Erro: Não foi possível converter '" << str << "' para int." << endl;
+            return 0; // Valor padrão em caso de erro
+        }
+    }
+
+    // Método para converter string para float
+    float stringToFloat(const string& str) {
+        try {
+            return stof(str);
+        } catch (const invalid_argument& e) {
+            cout << "Erro: Não foi possível converter '" << str << "' para float." << endl;
+            return 0.0f; // Valor padrão em caso de erro
+        }
     }
 };
 
