@@ -74,6 +74,11 @@ public:
             std::cout << std::endl;
         }
     }
+
+    // Método para retornar o endereço do array bidimensional
+    std::string (*getData())[100] {
+        return data;
+    }
 };
 
 #endif // READ_CSV_H
