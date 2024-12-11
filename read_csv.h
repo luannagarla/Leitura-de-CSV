@@ -1,7 +1,3 @@
-// Arquivo: read_csv.h
-#ifndef READ_CSV_H
-#define READ_CSV_H
-
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -154,5 +150,3 @@ public:
         return ss.str();
     }
 };
-
-#endif // READ_CSV_H
