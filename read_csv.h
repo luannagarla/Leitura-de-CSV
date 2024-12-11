@@ -9,91 +9,63 @@ using namespace std;
 class CSVReader
 {
 private:
-    string filename;       // Nome do arquivo CSV
-    char delimiter;        // Delimitador usado para separar os valores
-    string data[100][100]; // Array para armazenar os dados do arquivo
-    int currentRows;       // Número de linhas lidas
-    int currentCols;       // Número de colunas lidas
+    string filename;
+    char delimiter;
+    string data[100][100];
+    int currentRows;
+    int currentCols;
 
 public:
-    // Construtor para inicializar o leitor
-    CSVReader(string file, char delim = ',')
-    {
-        filename = file;
-        delimiter = delim;
-        currentRows = 0;
-        currentCols = 0;
-    }
+    CSVReader(string file, char delim = ',') : filename(file), delimiter(delim), currentRows(0), currentCols(0) {}
 
-    string (*readData(ifstream &file))[100] // Retorna um ponteiro para array 100x100
+    int getCurrentRows() const { return currentRows; }
+    int getCurrentCols() const { return currentCols; }
+
+    string (*readData(ifstream &file))[100]
     {
         string line;
         int row = 0;
 
         while (getline(file, line) && row < 100)
         {
-            stringstream ss(line); // Transforma a linha em um stream
+            stringstream ss(line);
             string cell;
             int col = 0;
 
-            // Lê cada célula da linha
             while (getline(ss, cell, delimiter) && col < 100)
             {
-                // Tenta converter o valor da célula para int ou float
                 if (isInteger(cell))
                 {
-                    data[row][col] = intToString(stringToInt(cell)); // Converte para int e armazena
+                    data[row][col] = intToString(stringToInt(cell));
                 }
                 else if (isFloat(cell))
                 {
-                    data[row][col] = floatToString(stringToFloat(cell)); // Converte para float e armazena
+                    data[row][col] = floatToString(stringToFloat(cell));
                 }
                 else
                 {
-                    data[row][col] = cell; // Armazena como string
+                    data[row][col] = cell;
                 }
                 col++;
             }
 
             if (col > currentCols)
-                currentCols = col; // Atualiza o número de colunas
+                currentCols = col;
             row++;
         }
 
-        currentRows = row; // Atualiza o número de linhas lidas
-        file.close();      // Fecha o arquivo
+        currentRows = row;
+        file.close();
 
-        return data; // Retorna o endereço do array
+        return data;
     }
 
-    void printData()
-    {
-        for (int i = 0; i < currentRows; i++)
-        {
-            for (int j = 0; j < currentCols; j++)
-            {
-                cout << data[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
+    int stringToInt(string str) { return atoi(str.c_str()); }
+    float stringToFloat(string str) { return atof(str.c_str()); }
 
-    // Método para converter string para inteiro
-    int stringToInt(string str)
-    {
-        return atoi(str.c_str()); // Usa a função atoi para conversão
-    }
-
-    // Método para converter string para float
-    float stringToFloat(string str)
-    {
-        return atof(str.c_str()); // Usa a função atof para conversão
-    }
-
-    // Método para verificar se uma string é um número inteiro
     bool isInteger(const string &str)
     {
-        for (int i = 0; i < str.length(); i++) // Loop convencional (compatível com C++98)
+        for (int i = 0; i < str.length(); i++)
         {
             if (!isdigit(str[i]) && str[i] != '-')
                 return false;
@@ -101,16 +73,15 @@ public:
         return true;
     }
 
-    // Método para verificar se uma string é um número float
     bool isFloat(const string &str)
     {
         bool dotFound = false;
-        for (int i = 0; i < str.length(); i++) // Loop convencional (compatível com C++98)
+        for (int i = 0; i < str.length(); i++)
         {
             if (str[i] == '.')
             {
                 if (dotFound)
-                    return false; // Se já encontrou um ponto, não é válido
+                    return false;
                 dotFound = true;
             }
             else if (!isdigit(str[i]) && str[i] != '-')
@@ -118,22 +89,20 @@ public:
                 return false;
             }
         }
-        return dotFound; // Retorna true se houver um ponto (.) e a string for válida
+        return dotFound;
     }
 
-    // Método para converter int para string
     string intToString(int value)
     {
         stringstream ss;
-        ss << value; // Converte o inteiro para string
+        ss << value;
         return ss.str();
     }
 
-    // Método para converter float para string
     string floatToString(float value)
     {
         stringstream ss;
-        ss << value; // Converte o float para string
+        ss << value;
         return ss.str();
     }
 };

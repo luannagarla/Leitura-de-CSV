@@ -4,19 +4,19 @@
 using namespace std;
 
 void processFile(string fileName);
+void printData(string (*data)[100], int rows, int cols);
 
 int main()
 {
     string file1 = "features-dataset1.csv";
     string file2 = "label-dataset1.csv";
-
+    
     processFile(file1);
     processFile(file2);
 
     return 0;
 }
 
-// Função para processar um arquivo
 void processFile(string fileName)
 {
     CSVReader reader(fileName, ',');
@@ -27,10 +27,10 @@ void processFile(string fileName)
 
     if (file.is_open())
     {
-        string (*data)[100] = reader.readData(file);  
+        string (*data)[100] = reader.readData(file);
 
         cout << "Conteúdo do arquivo:" << endl;
-        reader.printData();
+        printData(data, reader.getCurrentRows(), reader.getCurrentCols());
     }
     else
     {
@@ -38,4 +38,16 @@ void processFile(string fileName)
     }
 
     cout << endl;
+}
+
+void printData(string (*data)[100], int rows, int cols)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            cout << data[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
