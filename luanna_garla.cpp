@@ -3,38 +3,39 @@
 
 using namespace std;
 
-int main() {
+void processFile(string fileName);
+
+int main()
+{
     string file1 = "features-dataset1.csv";
     string file2 = "label-dataset1.csv";
 
-    CSVReader reader1(file1, ',');
-    CSVReader reader2(file2, ',');
+    processFile(file1);
+    processFile(file2);
 
-    cout << "Lendo o arquivo: " << file1 << endl;
-    if (reader1.readData()) {
-        cout << "Conteúdo do arquivo " << file1 << ":" << endl;
-        reader1.printData();
-        
-        // Acessando o endereço da matriz de dados
-        string (*data1)[100] = reader1.getData();
-        // Exemplo de como acessar um valor específico da matriz
-        cout << "Primeiro valor lido do arquivo " << file1 << ": " << data1[0][0] << endl;
-    } else {
-        cerr << "Erro ao ler o arquivo " << file1 << endl;
+    return 0;
+}
+
+// Função para processar um arquivo
+void processFile(string fileName)
+{
+    CSVReader reader(fileName, ',');
+    cout << "-------------------------------------------------" << endl;
+    cout << "Lendo o arquivo: " << fileName << endl;
+
+    ifstream file(fileName.c_str());
+
+    if (file.is_open())
+    {
+        string (*data)[100] = reader.readData(file);  
+
+        cout << "Conteúdo do arquivo:" << endl;
+        reader.printData();
+    }
+    else
+    {
+        cout << "Erro ao abrir o arquivo: " << fileName << endl;
     }
 
     cout << endl;
-
-    cout << "Lendo o arquivo: " << file2 << endl;
-    if (reader2.readData()) {
-        cout << "Conteúdo do arquivo " << file2 << ":" << endl;
-        reader2.printData();
-        
-        string (*data2)[100] = reader2.getData();
-        cout << "Primeiro valor lido do arquivo " << file2 << ": " << data2[0][0] << endl;
-    } else {
-        cerr << "Erro ao ler o arquivo " << file2 << endl;
-    }
-
-    return 0;
 }

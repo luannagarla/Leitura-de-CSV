@@ -9,11 +9,11 @@ using namespace std;
 class CSVReader
 {
 private:
-    string filename; // Nome do arquivo CSV
-    char delimiter;  // Delimitador usado para separar os valores
+    string filename;       // Nome do arquivo CSV
+    char delimiter;        // Delimitador usado para separar os valores
     string data[100][100]; // Array para armazenar os dados do arquivo
-    int currentRows; // Número de linhas lidas
-    int currentCols; // Número de colunas lidas
+    int currentRows;       // Número de linhas lidas
+    int currentCols;       // Número de colunas lidas
 
 public:
     // Construtor para inicializar o leitor
@@ -25,20 +25,11 @@ public:
         currentCols = 0;
     }
 
-    // Método para ler os dados do arquivo CSV
-    bool readData()
+    string (*readData(ifstream &file))[100] // Retorna um ponteiro para array 100x100
     {
-        ifstream file(filename.c_str()); // Abre o arquivo
-        if (!file.is_open()) // Verifica se o arquivo foi aberto corretamente
-        {
-            cout << "Erro ao abrir o arquivo: " << filename << endl;
-            return false;
-        }
-
         string line;
         int row = 0;
 
-        // Lê o arquivo linha por linha
         while (getline(file, line) && row < 100)
         {
             stringstream ss(line); // Transforma a linha em um stream
@@ -64,16 +55,17 @@ public:
                 col++;
             }
 
-            if (col > currentCols) currentCols = col; // Atualiza o número de colunas
+            if (col > currentCols)
+                currentCols = col; // Atualiza o número de colunas
             row++;
         }
 
         currentRows = row; // Atualiza o número de linhas lidas
-        file.close(); // Fecha o arquivo
-        return true;
+        file.close();      // Fecha o arquivo
+
+        return data; // Retorna o endereço do array
     }
 
-    // Método para imprimir os dados na tela
     void printData()
     {
         for (int i = 0; i < currentRows; i++)
@@ -84,12 +76,6 @@ public:
             }
             cout << endl;
         }
-    }
-
-    // Método para retornar o endereço da matriz bidimensional de dados
-    string (*getData())[100]
-    {
-        return data;
     }
 
     // Método para converter string para inteiro
@@ -123,7 +109,8 @@ public:
         {
             if (str[i] == '.')
             {
-                if (dotFound) return false; // Se já encontrou um ponto, não é válido
+                if (dotFound)
+                    return false; // Se já encontrou um ponto, não é válido
                 dotFound = true;
             }
             else if (!isdigit(str[i]) && str[i] != '-')
