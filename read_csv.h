@@ -1,3 +1,4 @@
+// Arquivo: read_csv.h
 #ifndef READ_CSV_H
 #define READ_CSV_H
 
@@ -51,7 +52,19 @@ public:
             // Lê cada célula da linha
             while (getline(ss, cell, delimiter) && col < 100)
             {
-                data[row][col] = cell; // Armazena no array
+                // Tenta converter o valor da célula para int ou float
+                if (isInteger(cell))
+                {
+                    data[row][col] = intToString(stringToInt(cell)); // Converte para int e armazena
+                }
+                else if (isFloat(cell))
+                {
+                    data[row][col] = floatToString(stringToFloat(cell)); // Converte para float e armazena
+                }
+                else
+                {
+                    data[row][col] = cell; // Armazena como string
+                }
                 col++;
             }
 
@@ -93,6 +106,47 @@ public:
     float stringToFloat(string str)
     {
         return atof(str.c_str()); // Usa a função atof para conversão
+    }
+
+    // Método para verificar se uma string é um número inteiro
+    bool isInteger(const string &str)
+    {
+        for (int i = 0; i < str.length(); i++) // Loop convencional (compatível com C++98)
+        {
+            if (!isdigit(str[i]) && str[i] != '-')
+                return false;
+        }
+        return true;
+    }
+
+    // Método para verificar se uma string é um número float
+    bool isFloat(const string &str)
+    {
+        bool dotFound = false;
+        for (int i = 0; i < str.length(); i++) // Loop convencional (compatível com C++98)
+        {
+            if (!isdigit(str[i]) && str[i] != '-')
+            {
+                return false;
+            }
+        }
+        return dotFound; // Retorna true se houver um ponto (.) e a string for válida
+    }
+
+    // Método para converter int para string
+    string intToString(int value)
+    {
+        stringstream ss;
+        ss << value; // Converte o inteiro para string
+        return ss.str();
+    }
+
+    // Método para converter float para string
+    string floatToString(float value)
+    {
+        stringstream ss;
+        ss << value; // Converte o float para string
+        return ss.str();
     }
 };
 
