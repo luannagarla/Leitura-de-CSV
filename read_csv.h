@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <cstdlib>
 
 using namespace std;
 
@@ -95,23 +96,18 @@ public:
     }
 
     // Método para converter string para int
-    int stringToInt(const string &str)
+    int stringToInt(string& str)
     {
-        try
-        {
-            size_t pos;
-            int value = stoi(str, &pos);
-            if (pos < str.size())
-            {
-                throw invalid_argument("Caracteres não numéricos encontrados");
-            }
-            return value;
-        }
-        catch (const invalid_argument &e)
+        char *end;
+        long value = strtol(str.c_str(), &end, 10); // Base 10 para números decimais
+
+        if (*end != '\0')
         {
             cerr << "Erro: Não foi possível converter '" << str << "' para int." << endl;
             return 0; // Valor padrão em caso de erro
         }
+
+        return static_cast<int>(value);
     }
 
     // Método para converter string para float
@@ -119,7 +115,7 @@ public:
     {
         try
         {
-            return std::stof(str);
+            return stof(str);
         }
         catch (const invalid_argument &e)
         {
