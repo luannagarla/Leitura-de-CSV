@@ -90,7 +90,7 @@ public:
         }
     }
 
-    // Método para retornar os dados como um array
+    // Método para retornar o endereço da matriz bidimensional de dados
     string (*getData())[100]
     {
         return data;
@@ -125,7 +125,12 @@ public:
         bool dotFound = false;
         for (int i = 0; i < str.length(); i++) // Loop convencional (compatível com C++98)
         {
-            if (!isdigit(str[i]) && str[i] != '-')
+            if (str[i] == '.')
+            {
+                if (dotFound) return false; // Se já encontrou um ponto, não é válido
+                dotFound = true;
+            }
+            else if (!isdigit(str[i]) && str[i] != '-')
             {
                 return false;
             }

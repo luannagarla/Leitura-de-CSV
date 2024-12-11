@@ -17,6 +17,11 @@ int main() {
     if (reader1.readData()) {
         cout << "Conteúdo do arquivo " << file1 << ":" << endl;
         reader1.printData();
+        
+        // Acessando o endereço da matriz de dados
+        string (*data1)[100] = reader1.getData();
+        // Exemplo de como acessar um valor específico da matriz
+        cout << "Primeiro valor lido do arquivo " << file1 << ": " << data1[0][0] << endl;
     } else {
         cerr << "Erro ao ler o arquivo " << file1 << endl;
     }
@@ -28,6 +33,11 @@ int main() {
     if (reader2.readData()) {
         cout << "Conteúdo do arquivo " << file2 << ":" << endl;
         reader2.printData();
+        
+        // Acessando o endereço da matriz de dados
+        string (*data2)[100] = reader2.getData();
+        // Exemplo de como acessar um valor específico da matriz
+        cout << "Primeiro valor lido do arquivo " << file2 << ": " << data2[0][0] << endl;
     } else {
         cerr << "Erro ao ler o arquivo " << file2 << endl;
     }
