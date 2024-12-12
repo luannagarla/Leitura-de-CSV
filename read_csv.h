@@ -12,7 +12,7 @@ class CSVReader
 private:
     string filename;
     char delimiter;
-    void *data[100][100]; // aceita vários tipos de dados, sintaxe complexa
+    void *data[100][100]; // aceita vários tipos de dados, sintaxe complexa -- precisa de um tamanho dinâmico?
     int currentRows;
     int currentCols;
 
@@ -47,9 +47,6 @@ private:
 
 public:
     CSVReader(string file, char delim = ',') : filename(file), delimiter(delim), currentRows(0), currentCols(0) {}
-
-    int getCurrentRows() const { return currentRows; }
-    int getCurrentCols() const { return currentCols; }
 
     void *readData(ifstream &file)
     {
