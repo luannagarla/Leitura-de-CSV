@@ -10,7 +10,7 @@ int main()
 {
     string file1 = "features-dataset1.csv";
     string file2 = "label-dataset1.csv";
-    
+
     processFile(file1);
     processFile(file2);
 
@@ -27,10 +27,7 @@ void processFile(string fileName)
 
     if (file.is_open())
     {
-        string (*data)[100] = reader.readData(file);
-
-        cout << "Conteúdo do arquivo:" << endl;
-        printData(data, reader.getCurrentRows(), reader.getCurrentCols());
+        void *data = reader.readData(file);
     }
     else
     {
@@ -40,14 +37,23 @@ void processFile(string fileName)
     cout << endl;
 }
 
-void printData(string (*data)[100], int rows, int cols)
+/*void printData(void* data[100][100], int rows, int cols)
 {
+    cout << "Dados lidos do arquivo CSV:" << endl;
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
-            cout << data[i][j] << " ";
+            // if (data[i][j] != nullptr)
+            // {
+            //     if (typeid(*(int *)data[i][j]) == typeid(int))
+            //         cout << *(int *)data[i][j] << "\t";
+            //     else if (typeid(*(float *)data[i][j]) == typeid(float))
+            //         cout << *(float *)data[i][j] << "\t";
+            //     else if (typeid(*(string *)data[i][j]) == typeid(string))
+            //         cout << *(string *)data[i][j] << "\t";
+            // }
         }
         cout << endl;
     }
-}
+}*/

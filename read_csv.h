@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
+#include <typeinfo> // Para usar typeid
 
 using namespace std;
 
@@ -11,9 +12,31 @@ class CSVReader
 private:
     string filename;
     char delimiter;
-    string data[100][100];
+    void *data[100][100];
     int currentRows;
     int currentCols;
+
+    // Método para exibir os dados
+    void printData()
+    {
+        cout << "Dados lidos do arquivo CSV:" << endl;
+        for (int i = 0; i < currentRows; i++)
+        {
+            for (int j = 0; j < currentCols; j++)
+            {
+                if (data[i][j] != NULL) // Verifica se há dados na célula
+                {
+                    if (typeid(*(int *)data[i][j]) == typeid(int))
+                        cout << *(int *)data[i][j] << "\t"; // Exibe número inteiro
+                    else if (typeid(*(float *)data[i][j]) == typeid(float))
+                        cout << *(float *)data[i][j] << "\t"; // Exibe número float
+                    else if (typeid(*(string *)data[i][j]) == typeid(string))
+                        cout << *(string *)data[i][j] << "\t"; // Exibe string
+                }
+            }
+            cout << endl; // Nova linha após cada linha
+        }
+    }
 
 public:
     CSVReader(string file, char delim = ',') : filename(file), delimiter(delim), currentRows(0), currentCols(0) {}
@@ -21,7 +44,7 @@ public:
     int getCurrentRows() const { return currentRows; }
     int getCurrentCols() const { return currentCols; }
 
-    string (*readData(ifstream &file))[100]
+    void *readData(ifstream &file)
     {
         string line;
         int row = 0;
@@ -35,17 +58,12 @@ public:
             while (getline(ss, cell, delimiter) && col < 100)
             {
                 if (isInteger(cell))
-                {
-                    data[row][col] = intToString(stringToInt(cell));
-                }
+                    data[row][col] = new int(stringToInt(cell));
                 else if (isFloat(cell))
-                {
-                    data[row][col] = floatToString(stringToFloat(cell));
-                }
+                    data[row][col] = new float(stringToFloat(cell));
                 else
-                {
-                    data[row][col] = cell;
-                }
+                    data[row][col] = new string(cell);
+
                 col++;
             }
 
@@ -57,6 +75,9 @@ public:
         currentRows = row;
         file.close();
 
+        // Chamar a exibição dos dados aqui
+        printData();
+
         return data;
     }
 
@@ -65,12 +86,7 @@ public:
 
     bool isInteger(const string &str)
     {
-        for (int i = 0; i < str.length(); i++)
-        {
-            if (!isdigit(str[i]) && str[i] != '-')
-                return false;
-        }
-        return true;
+        return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);
     }
 
     bool isFloat(const string &str)
@@ -90,19 +106,5 @@ public:
             }
         }
         return dotFound;
-    }
-
-    string intToString(int value)
-    {
-        stringstream ss;
-        ss << value;
-        return ss.str();
-    }
-
-    string floatToString(float value)
-    {
-        stringstream ss;
-        ss << value;
-        return ss.str();
     }
 };
