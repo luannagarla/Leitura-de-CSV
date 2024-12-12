@@ -28,12 +28,16 @@ private:
 
                 if (i == 0)
                     cout << *(string *)actual << "\t"; // cast obaa
-                else if (actual != NULL) //as virgulas que tinham no arquivo viraram null, causou confusão
+                else if (actual != NULL)               // as virgulas que tinham no arquivo viraram null, causou confusão
                 {
                     if (typeid(*(int *)actual) == typeid(int))
+                    {
                         cout << *(int *)actual << "\t";
+                    }
                     else if (typeid(*(float *)actual) == typeid(float))
+                    {
                         cout << *(float *)actual << "\t";
+                    }
                 }
             }
 
@@ -81,7 +85,6 @@ public:
         file.close();
 
         printData();
-
         return data;
     }
 
