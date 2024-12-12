@@ -16,7 +16,7 @@ private:
     int currentRows;
     int currentCols;
 
-    // Método para exibir os dados
+    // Uso TypeId
     void printData()
     {
         cout << "Dados lidos do arquivo CSV:" << endl;
@@ -24,7 +24,7 @@ private:
         {
             for (int j = 0; j < currentCols; j++)
             {
-                if (data[i][j] != NULL) // Verifica se há dados na célula
+                if (data[i][j] != NULL) 
                 {
                     if (typeid(*(int *)data[i][j]) == typeid(int))
                         cout << *(int *)data[i][j] << "\t"; // Exibe número inteiro
@@ -34,7 +34,7 @@ private:
                         cout << *(string *)data[i][j] << "\t"; // Exibe string
                 }
             }
-            cout << endl; // Nova linha após cada linha
+            cout << endl; 
         }
     }
 
@@ -75,7 +75,6 @@ public:
         currentRows = row;
         file.close();
 
-        // Chamar a exibição dos dados aqui
         printData();
 
         return data;
@@ -89,6 +88,7 @@ public:
         return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);
     }
 
+    //Não consegui usar o typeId e não entendi se teria realmente como
     bool isFloat(const string &str)
     {
         bool dotFound = false;

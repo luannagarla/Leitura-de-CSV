@@ -4,15 +4,20 @@
 using namespace std;
 
 void processFile(string fileName);
-void printData(string (*data)[100], int rows, int cols);
+
+//Queria ter implementado o print data aqui ;c
 
 int main()
 {
     string file1 = "features-dataset1.csv";
     string file2 = "label-dataset1.csv";
+    string file3 = "features-dataset2.csv";
+    string file4 = "label-dataset2.csv";
 
     processFile(file1);
     processFile(file2);
+    processFile(file3);
+    processFile(file4);
 
     return 0;
 }
@@ -36,24 +41,3 @@ void processFile(string fileName)
 
     cout << endl;
 }
-
-/*void printData(void* data[100][100], int rows, int cols)
-{
-    cout << "Dados lidos do arquivo CSV:" << endl;
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            // if (data[i][j] != nullptr)
-            // {
-            //     if (typeid(*(int *)data[i][j]) == typeid(int))
-            //         cout << *(int *)data[i][j] << "\t";
-            //     else if (typeid(*(float *)data[i][j]) == typeid(float))
-            //         cout << *(float *)data[i][j] << "\t";
-            //     else if (typeid(*(string *)data[i][j]) == typeid(string))
-            //         cout << *(string *)data[i][j] << "\t";
-            // }
-        }
-        cout << endl;
-    }
-}*/
