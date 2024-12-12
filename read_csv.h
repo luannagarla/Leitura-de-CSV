@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include <typeinfo> // Para usar typeid
+#include <typeinfo>
 
 using namespace std;
 
@@ -12,29 +12,32 @@ class CSVReader
 private:
     string filename;
     char delimiter;
-    void *data[100][100];
+    void *data[100][100]; // aceita vários tipos de dados, sintaxe complexa
     int currentRows;
     int currentCols;
 
-    // Uso TypeId
+    // Uso do TypeId
     void printData()
     {
-        cout << "Dados lidos do arquivo CSV:" << endl;
+        cout << "Dados:" << endl;
         for (int i = 0; i < currentRows; i++)
         {
             for (int j = 0; j < currentCols; j++)
             {
-                if (data[i][j] != NULL) 
+                void *actual = data[i][j];
+
+                if (i == 0)
+                    cout << *(string *)actual << "\t"; // cast obaa
+                else if (actual != NULL) //as virgulas que tinham no arquivo viraram null, causou confusão
                 {
-                    if (typeid(*(int *)data[i][j]) == typeid(int))
-                        cout << *(int *)data[i][j] << "\t"; // Exibe número inteiro
-                    else if (typeid(*(float *)data[i][j]) == typeid(float))
-                        cout << *(float *)data[i][j] << "\t"; // Exibe número float
-                    else if (typeid(*(string *)data[i][j]) == typeid(string))
-                        cout << *(string *)data[i][j] << "\t"; // Exibe string
+                    if (typeid(*(int *)actual) == typeid(int))
+                        cout << *(int *)actual << "\t";
+                    else if (typeid(*(float *)actual) == typeid(float))
+                        cout << *(float *)actual << "\t";
                 }
             }
-            cout << endl; 
+
+            cout << endl;
         }
     }
 
@@ -57,12 +60,14 @@ public:
 
             while (getline(ss, cell, delimiter) && col < 100)
             {
-                if (isInteger(cell))
+                if (cell.empty())
+                    data[row][col] = new int(0); // tratativa de nulos meio ruim
+                else if (isInteger(cell))
                     data[row][col] = new int(stringToInt(cell));
                 else if (isFloat(cell))
                     data[row][col] = new float(stringToFloat(cell));
                 else
-                    data[row][col] = new string(cell);
+                    data[row][col] = new string(cell); // cabeçalho
 
                 col++;
             }
@@ -88,7 +93,7 @@ public:
         return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);
     }
 
-    //Não consegui usar o typeId e não entendi se teria realmente como
+    // Não consegui usar o typeId e não entendi se teria realmente como
     bool isFloat(const string &str)
     {
         bool dotFound = false;
