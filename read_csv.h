@@ -37,6 +37,7 @@ public:
         return isFirstColumnInt;
     }
 
+    //retorna ponteiro de pontiro
     void* readData(ifstream &file)
     {
         string data[100][100];
@@ -123,16 +124,19 @@ public:
         }
     }
 
+    //atoi
     int stringToInt(const string &str)
     {
         return atoi(str.c_str());
     }
 
+    //atof
     float stringToFloat(const string &str)
     {
         return atof(str.c_str());
     }
 
+    //queria ter usado typeId, mas não entendi como
     bool isInteger(const string &str)
     {
         return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);

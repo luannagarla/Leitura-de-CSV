@@ -13,8 +13,8 @@ int main()
     string file3 = "features-dataset2.csv";
     string file4 = "label-dataset2.csv";
 
-    char delimiter = ',';
-    bool ignoreFirstLine = true;
+    char delimiter = ','; //pode ser alterado
+    bool ignoreFirstLine = true; //pode ser alterado
 
     processFile(file1, delimiter, ignoreFirstLine);
     processFile(file2, delimiter, ignoreFirstLine);
@@ -24,7 +24,7 @@ int main()
     return 0;
 }
 
-void processFile(string fileName, char delimiter, bool ignoreFirstLine)
+void processFile(string fileName, char delimiter, bool ignoreFirstLine) //para otimizar código
 {
     CSVReader reader(fileName, delimiter, ignoreFirstLine);
     cout << "-------------------------------------------------" << endl;
@@ -35,16 +35,7 @@ void processFile(string fileName, char delimiter, bool ignoreFirstLine)
     {
         void *newLista = reader.readData(file); 
 
-        printData(newLista, reader.getIsFirstColumnInt(), reader.getCurrentRows(), reader.getCurrentCols());
-
-        if (reader.getIsFirstColumnInt())
-        {
-            delete[] static_cast<int **>(newLista); 
-        }
-        else
-        {
-            delete[] static_cast<float **>(newLista);
-        }
+        printData(newLista, reader.getIsFirstColumnInt(), reader.getCurrentRows(), reader.getCurrentCols());         
     }
     else
     {
@@ -56,7 +47,7 @@ void printData(void *newLista, bool isFirstColumnInt, int currentRows, int curre
 {
     if (isFirstColumnInt)
     {
-        int **dataInt = static_cast<int **>(newLista);
+        int **dataInt = static_cast<int **>(newLista); //tirando de void
         for (int i = 0; i < currentRows; i++)
         {
             for (int j = 0; j < currentCols; j++)
