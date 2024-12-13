@@ -12,52 +12,51 @@ private:
     string filename;
     char delimiter;
     bool ignoreFirstLine;
-    string data[1000][1000];
+    int currentRows;
+    int currentCols;
+    bool isFirstColumnInt;
 
 public:
     CSVReader(const string &file, char delim = ',', bool ignoreFLine = true)
-        : filename(file), delimiter(delim), ignoreFirstLine(ignoreFLine)
+        : filename(file), delimiter(delim), ignoreFirstLine(ignoreFLine), currentRows(0), currentCols(0), isFirstColumnInt(true)
     {
-        ifstream fileStream(filename.c_str());
-        if (fileStream.is_open())
-        {
-            readData(fileStream);  // Lê os dados no momento da criação do objeto
-        }
-        else
-        {
-            cout << "Erro ao abrir o arquivo: " << filename << endl;
-        }
     }
 
-    int currentRows = 0;
-    int currentCols = 0;
-
-    void readData(ifstream &file)
+    int getCurrentRows()
     {
+        return currentRows;
+    }
+
+    int getCurrentCols()
+    {
+        return currentCols;
+    }
+
+    bool getIsFirstColumnInt()
+    {
+        return isFirstColumnInt;
+    }
+
+    void *readData(ifstream &file)
+    {
+        string data[1000][1000]; 
         string line;
         int row = 0;
-        
+
         if (ignoreFirstLine)
         {
-            getline(file, line); // Ignora a primeira linha de cabeçalho
+            getline(file, line); 
         }
 
-        while (getline(file, line) && row < 100)
+        while (getline(file, line) && row < 1000)
         {
             stringstream ss(line);
             string cell;
             int col = 0;
 
-            while (getline(ss, cell, delimiter) && col < 100)
+            while (getline(ss, cell, delimiter) && col < 1000)
             {
-                if (cell.empty())
-                {
-                    data[row][col] = "0"; // Tratamento de nulos
-                }
-                else
-                {
-                    data[row][col] = cell;
-                }
+                data[row][col] = (cell.empty()) ? "0" : cell; 
                 col++;
             }
 
@@ -69,72 +68,68 @@ public:
         }
 
         currentRows = row;
-        file.close();
-    }
-
-    bool isFirstColumnInt()
-    {
-        bool isFirstColumnInt = true;
+        
         for (int i = 1; i < currentRows; i++)
         {
             if (!isInteger(data[i][0]))
             {
                 isFirstColumnInt = false;
+                break; 
             }
         }
 
-        return isFirstColumnInt;
+        file.close();                                
+        return createNewList(isFirstColumnInt, data); 
     }
 
-    // Não precisa mais de ifstream, agora cria a lista com base nos dados já lidos
-    void *createNewList()
+    void *createNewList(bool firstColumnInt, string data[1000][1000])
     {
-        bool firstColumnInt = isFirstColumnInt();
-
         if (firstColumnInt)
         {
-            int **newData = new int *[currentRows]; // aloca um vetor de ponteiros para linhas
+            int **newData = new int *[currentRows]; // Aloca um vetor de ponteiros para linhas
 
             for (int i = 0; i < currentRows; ++i)
             {
-                newData[i] = new int[currentCols]; // aloca cada linha dinamicamente
+                newData[i] = new int[currentCols]; // Aloca cada linha dinamicamente
             }
 
             for (int i = 0; i < currentRows; ++i)
             {
                 for (int j = 0; j < currentCols; ++j)
                 {
-                    newData[i][j] = stringToInt(data[i][j]);
+                    newData[i][j] = stringToInt(data[i][j]); // Converte string para int
                 }
             }
 
-            return (void *)newData;
+            return (void *)newData; // Retorna como ponteiro void
         }
-
-        float **newData = new float *[currentRows]; // aloca um vetor de ponteiros para linhas
-
-        for (int i = 0; i < currentRows; ++i)
+        else
         {
-            newData[i] = new float[currentCols]; // aloca cada linha dinamicamente
-        }
+            float **newData = new float *[currentRows]; // Aloca um vetor de ponteiros para linhas
 
-        for (int i = 0; i < currentRows; ++i)
-        {
-            for (int j = 0; j < currentCols; ++j)
+            for (int i = 0; i < currentRows; ++i)
             {
-                newData[i][j] = stringToFloat(data[i][j]);
+                newData[i] = new float[currentCols]; // Aloca cada linha dinamicamente
             }
-        }
 
-        return (void *)newData;
+            for (int i = 0; i < currentRows; ++i)
+            {
+                for (int j = 0; j < currentCols; ++j)
+                {
+                    newData[i][j] = stringToFloat(data[i][j]); // Converte string para float
+                }
+            }
+
+            return (void *)newData; // Retorna como ponteiro void
+        }
     }
 
-    int stringToInt(string str)
+    int stringToInt(const string &str)
     {
         return atoi(str.c_str());
     }
 
-    float stringToFloat(string str)
+    float stringToFloat(const string &str)
     {
         return atof(str.c_str());
     }
@@ -142,24 +137,5 @@ public:
     bool isInteger(const string &str)
     {
         return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);
-    }
-
-    bool isFloat(const string &str)
-    {
-        bool dotFound = false;
-        for (int i = 0; i < str.length(); i++)
-        {
-            if (str[i] == '.')
-            {
-                if (dotFound)
-                    return false;
-                dotFound = true;
-            }
-            else if (!isdigit(str[i]) && str[i] != '-')
-            {
-                return false;
-            }
-        }
-        return dotFound;
     }
 };
