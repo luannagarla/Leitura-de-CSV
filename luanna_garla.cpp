@@ -8,10 +8,10 @@ void printData(void *newLista, bool isFirstColumnInt, int currentRows, int curre
 
 int main()
 {
-    string file1 = "features-dataset1.csv";
-    string file2 = "label-dataset1.csv";
-    string file3 = "features-dataset2.csv";
-    string file4 = "label-dataset2.csv";
+    string file1 = "features-Aula 13 - Projeto 1 - dataset1.csv";
+    string file2 = "features-Aula 13 - Projeto 1 - dataset2.csv";
+    string file3 = "label-Aula 13 - Projeto 1 - dataset1.csv";
+    string file4 = "label-Aula 13 - Projeto 1 - dataset2.csv";
 
     char delimiter = ','; //pode ser alterado
     bool ignoreFirstLine = true; //pode ser alterado
