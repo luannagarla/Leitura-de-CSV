@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void processFile(string fileName);
+void processFile(string fileName, char delimiter, bool ignoreFirstLine);
 void printData(void* newLista, bool isFirstColumnInt, int currentRows, int currentCols);
 
 int main()
@@ -24,7 +24,7 @@ int main()
     return 0;
 }
 
-void processFile(string fileName char delimiter, bool ignoreFirstLine)
+void processFile(string fileName, char delimiter, bool ignoreFirstLine)
 {
     CSVReader reader(fileName, delimiter, ignoreFirstLine);
     cout << "-------------------------------------------------" << endl;
