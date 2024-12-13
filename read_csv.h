@@ -11,10 +11,12 @@ class CSVReader
 private:
     string filename;
     char delimiter;
+    bool ignoreFirstLine;
     string data[1000][1000];
 
 public:
-    CSVReader(string file, char delim = ',') : filename(file), delimiter(delim) {}
+    CSVReader(const string &file, char delim = ',', bool ignoreFLine = true)
+        : filename(file), delimiter(delim), ignoreFirstLine(ignoreFLine) {}
 
     int currentRows = 0;
     int currentCols = 0;
@@ -23,6 +25,11 @@ public:
     {
         string line;
         int row = 0;
+        
+        if (ignoreFirstLine)
+        {
+            getline(file, line); // Ignora a primeira linha de cabeçalho
+        }
 
         while (getline(file, line) && row < 100)
         {

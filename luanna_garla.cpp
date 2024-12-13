@@ -1,6 +1,5 @@
 #include "read_csv.h"
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -14,17 +13,20 @@ int main()
     string file3 = "features-dataset2.csv";
     string file4 = "label-dataset2.csv";
 
-    processFile(file1);
-    processFile(file2);
-    processFile(file3);
-    processFile(file4);
+    char delimiter = ',';
+    bool ignoreFirstLine = true;
+
+    processFile(file1, delimiter, ignoreFirstLine);
+    processFile(file2, delimiter, ignoreFirstLine);
+    processFile(file3, delimiter, ignoreFirstLine);
+    processFile(file4, delimiter, ignoreFirstLine);
 
     return 0;
 }
 
-void processFile(string fileName)
+void processFile(string fileName char delimiter, bool ignoreFirstLine)
 {
-    CSVReader reader(fileName, ',');
+    CSVReader reader(fileName, delimiter, ignoreFirstLine);
     cout << "-------------------------------------------------" << endl;
     cout << "Arquivo: " << fileName << endl;
 
@@ -36,8 +38,8 @@ void processFile(string fileName)
 
         printData(newLista, reader.isFirstColumnInt(), reader.currentRows, reader.currentCols);
 
-        // Se você alocou memória dinamicamente, não se esqueça de liberar a memória depois
-        delete[] static_cast<int**>(newLista);  // Libera a memória de um int** alocado dinamicamente
+        // delete[] static_cast<int**>(newLista);         
+        // delete[] static_cast<float**>(newLista);  
     }
     else
     {
