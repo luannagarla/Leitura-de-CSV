@@ -16,7 +16,18 @@ private:
 
 public:
     CSVReader(const string &file, char delim = ',', bool ignoreFLine = true)
-        : filename(file), delimiter(delim), ignoreFirstLine(ignoreFLine) {}
+        : filename(file), delimiter(delim), ignoreFirstLine(ignoreFLine)
+    {
+        ifstream fileStream(filename.c_str());
+        if (fileStream.is_open())
+        {
+            readData(fileStream);  // Lê os dados no momento da criação do objeto
+        }
+        else
+        {
+            cout << "Erro ao abrir o arquivo: " << filename << endl;
+        }
+    }
 
     int currentRows = 0;
     int currentCols = 0;
@@ -41,7 +52,7 @@ public:
             {
                 if (cell.empty())
                 {
-                    data[row][col] = "0"; // Tratamento de nulos meio ruim
+                    data[row][col] = "0"; // Tratamento de nulos
                 }
                 else
                 {
@@ -75,10 +86,9 @@ public:
         return isFirstColumnInt;
     }
 
-    void *createNewList(ifstream &file)
+    // Não precisa mais de ifstream, agora cria a lista com base nos dados já lidos
+    void *createNewList()
     {
-        readData(file);
-
         bool firstColumnInt = isFirstColumnInt();
 
         if (firstColumnInt)
