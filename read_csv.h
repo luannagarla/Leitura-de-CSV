@@ -11,7 +11,7 @@ class CSVReader
 private:
     string filename;
     char delimiter;
-    string data[1000][1000];    
+    string data[1000][1000];
 
 public:
     CSVReader(string file, char delim = ',') : filename(file), delimiter(delim) {}
@@ -70,16 +70,22 @@ public:
 
     void *createNewList(ifstream &file)
     {
-        readData(file); 
+        readData(file);
 
         bool firstColumnInt = isFirstColumnInt();
 
         if (firstColumnInt)
         {
-            int newData[currentCols][currentRows];
-            for (int i = 0; i < currentRows; i++)
+            int **newData = new int *[currentRows]; // aloca um vetor de ponteiros para linhas
+
+            for (int i = 0; i < currentRows; ++i)
             {
-                for (int j = 0; j < currentCols; j++)
+                newData[i] = new int[currentCols]; // aloca cada linha dinamicamente
+            }
+
+            for (int i = 0; i < currentRows; ++i)
+            {
+                for (int j = 0; j < currentCols; ++j)
                 {
                     newData[i][j] = stringToInt(data[i][j]);
                 }
@@ -88,10 +94,16 @@ public:
             return (void *)newData;
         }
 
-        float newData[currentCols][currentRows];
-        for (int i = 0; i < currentRows; i++)
+        float **newData = new float *[currentRows]; // aloca um vetor de ponteiros para linhas
+
+        for (int i = 0; i < currentRows; ++i)
         {
-            for (int j = 0; j < currentCols; j++)
+            newData[i] = new float[currentCols]; // aloca cada linha dinamicamente
+        }
+
+        for (int i = 0; i < currentRows; ++i)
+        {
+            for (int j = 0; j < currentCols; ++j)
             {
                 newData[i][j] = stringToFloat(data[i][j]);
             }
@@ -115,7 +127,7 @@ public:
         return !str.empty() && (str.find_first_not_of("0123456789-") == string::npos);
     }
 
-     bool isFloat(const string &str)
+    bool isFloat(const string &str)
     {
         bool dotFound = false;
         for (int i = 0; i < str.length(); i++)
@@ -133,5 +145,4 @@ public:
         }
         return dotFound;
     }
-
 };

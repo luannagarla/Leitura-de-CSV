@@ -35,6 +35,9 @@ void processFile(string fileName)
         void *newLista = reader.createNewList(file);
 
         printData(newLista, reader.isFirstColumnInt(), reader.currentRows, reader.currentCols);
+
+        // Se você alocou memória dinamicamente, não se esqueça de liberar a memória depois
+        delete[] static_cast<int**>(newLista);  // Libera a memória de um int** alocado dinamicamente
     }
     else
     {
@@ -48,7 +51,7 @@ void printData(void* newLista, bool isFirstColumnInt, int currentRows, int curre
 {
     if (isFirstColumnInt)
     {
-        int (*dataInt)[100] = static_cast<int (*)[100]>(newLista);
+        int **dataInt = static_cast<int**>(newLista);  // Cast para ponteiro para ponteiro de int
 
         for (int i = 0; i < currentRows; i++)
         {
@@ -61,7 +64,7 @@ void printData(void* newLista, bool isFirstColumnInt, int currentRows, int curre
     }
     else
     {
-        float (*dataFloat)[100] = static_cast<float (*)[100]>(newLista);
+        float **dataFloat = static_cast<float**>(newLista);  // Cast para ponteiro para ponteiro de float
 
         for (int i = 0; i < currentRows; i++)
         {
