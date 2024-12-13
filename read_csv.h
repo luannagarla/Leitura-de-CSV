@@ -37,26 +37,26 @@ public:
         return isFirstColumnInt;
     }
 
-    void *readData(ifstream &file)
+    void* readData(ifstream &file)
     {
-        string data[1000][1000]; 
+        string data[100][100];
         string line;
         int row = 0;
 
         if (ignoreFirstLine)
         {
-            getline(file, line); 
+            getline(file, line);
         }
 
-        while (getline(file, line) && row < 1000)
+        while (getline(file, line) && row < 100)
         {
             stringstream ss(line);
             string cell;
             int col = 0;
 
-            while (getline(ss, cell, delimiter) && col < 1000)
+            while (getline(ss, cell, delimiter) && col < 100)
             {
-                data[row][col] = (cell.empty()) ? "0" : cell; 
+                data[row][col] = (cell.empty()) ? "0" : cell;
                 col++;
             }
 
@@ -64,6 +64,7 @@ public:
             {
                 currentCols = col;
             }
+
             row++;
         }
 
@@ -78,47 +79,47 @@ public:
             }
         }
 
-        file.close();                                 
-        return createNewList(isFirstColumnInt, data); 
+        file.close();
+        return createNewList(isFirstColumnInt, data);
     }
 
-    void *createNewList(bool firstColumnInt, string data[1000][1000])
+    void *createNewList(bool firstColumnInt, string data[100][100])
     {
         if (firstColumnInt)
         {
-            int **newData = new int *[currentRows]; 
+            int **newData = new int *[currentRows];
             for (int i = 0; i < currentRows; ++i)
             {
-                newData[i] = new int[currentCols]; 
+                newData[i] = new int[currentCols];
             }
 
             for (int i = 0; i < currentRows; ++i)
             {
                 for (int j = 0; j < currentCols; ++j)
                 {
-                    newData[i][j] = stringToInt(data[i][j]); 
+                    newData[i][j] = stringToInt(data[i][j]);
                 }
             }
 
-            return (void *)newData; 
+            return (void *)newData;
         }
         else
         {
-            float **newData = new float *[currentRows]; 
+            float **newData = new float *[currentRows];
             for (int i = 0; i < currentRows; ++i)
             {
-                newData[i] = new float[currentCols]; 
+                newData[i] = new float[currentCols];
             }
 
             for (int i = 0; i < currentRows; ++i)
             {
                 for (int j = 0; j < currentCols; ++j)
                 {
-                    newData[i][j] = stringToFloat(data[i][j]); 
+                    newData[i][j] = stringToFloat(data[i][j]);
                 }
             }
 
-            return (void *)newData; 
+            return (void *)newData;
         }
     }
 

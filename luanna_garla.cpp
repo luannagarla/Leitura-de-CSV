@@ -17,9 +17,9 @@ int main()
     bool ignoreFirstLine = true;
 
     processFile(file1, delimiter, ignoreFirstLine);
-    // processFile(file2, delimiter, ignoreFirstLine);
-    // processFile(file3, delimiter, ignoreFirstLine);
-    // processFile(file4, delimiter, ignoreFirstLine);
+    processFile(file2, delimiter, ignoreFirstLine);
+    processFile(file3, delimiter, ignoreFirstLine);
+    processFile(file4, delimiter, ignoreFirstLine);
 
     return 0;
 }
