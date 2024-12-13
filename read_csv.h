@@ -22,17 +22,17 @@ public:
     {
     }
 
-    int getCurrentRows()
+    int getCurrentRows() const
     {
         return currentRows;
     }
 
-    int getCurrentCols()
+    int getCurrentCols() const
     {
         return currentCols;
     }
 
-    bool getIsFirstColumnInt()
+    bool getIsFirstColumnInt() const
     {
         return isFirstColumnInt;
     }
@@ -68,17 +68,17 @@ public:
         }
 
         currentRows = row;
-        
+
         for (int i = 1; i < currentRows; i++)
         {
             if (!isInteger(data[i][0]))
             {
                 isFirstColumnInt = false;
-                break; 
+                break;
             }
         }
 
-        file.close();                                
+        file.close();                                 
         return createNewList(isFirstColumnInt, data); 
     }
 
@@ -86,41 +86,39 @@ public:
     {
         if (firstColumnInt)
         {
-            int **newData = new int *[currentRows]; // Aloca um vetor de ponteiros para linhas
-
+            int **newData = new int *[currentRows]; 
             for (int i = 0; i < currentRows; ++i)
             {
-                newData[i] = new int[currentCols]; // Aloca cada linha dinamicamente
+                newData[i] = new int[currentCols]; 
             }
 
             for (int i = 0; i < currentRows; ++i)
             {
                 for (int j = 0; j < currentCols; ++j)
                 {
-                    newData[i][j] = stringToInt(data[i][j]); // Converte string para int
+                    newData[i][j] = stringToInt(data[i][j]); 
                 }
             }
 
-            return (void *)newData; // Retorna como ponteiro void
+            return (void *)newData; 
         }
         else
         {
-            float **newData = new float *[currentRows]; // Aloca um vetor de ponteiros para linhas
-
+            float **newData = new float *[currentRows]; 
             for (int i = 0; i < currentRows; ++i)
             {
-                newData[i] = new float[currentCols]; // Aloca cada linha dinamicamente
+                newData[i] = new float[currentCols]; 
             }
 
             for (int i = 0; i < currentRows; ++i)
             {
                 for (int j = 0; j < currentCols; ++j)
                 {
-                    newData[i][j] = stringToFloat(data[i][j]); // Converte string para float
+                    newData[i][j] = stringToFloat(data[i][j]); 
                 }
             }
 
-            return (void *)newData; // Retorna como ponteiro void
+            return (void *)newData; 
         }
     }
 

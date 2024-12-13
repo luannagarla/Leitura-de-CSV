@@ -33,13 +33,18 @@ void processFile(string fileName, char delimiter, bool ignoreFirstLine)
     ifstream file(fileName.c_str());
     if (file.is_open())
     {
-        CSVReader reader(fileName, delimiter, ignoreFirstLine); 
-        void *newLista = reader.readData(file);                 
+        void *newLista = reader.readData(file); 
 
         printData(newLista, reader.getIsFirstColumnInt(), reader.getCurrentRows(), reader.getCurrentCols());
 
-        delete[] static_cast<int **>(newLista);   
-        delete[] static_cast<float **>(newLista); 
+        if (reader.getIsFirstColumnInt())
+        {
+            delete[] static_cast<int **>(newLista); 
+        }
+        else
+        {
+            delete[] static_cast<float **>(newLista);
+        }
     }
     else
     {
@@ -52,7 +57,6 @@ void printData(void *newLista, bool isFirstColumnInt, int currentRows, int curre
     if (isFirstColumnInt)
     {
         int **dataInt = static_cast<int **>(newLista);
-
         for (int i = 0; i < currentRows; i++)
         {
             for (int j = 0; j < currentCols; j++)
@@ -65,7 +69,6 @@ void printData(void *newLista, bool isFirstColumnInt, int currentRows, int curre
     else
     {
         float **dataFloat = static_cast<float **>(newLista);
-
         for (int i = 0; i < currentRows; i++)
         {
             for (int j = 0; j < currentCols; j++)
