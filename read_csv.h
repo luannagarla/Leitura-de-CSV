@@ -22,17 +22,17 @@ public:
     {
     }
 
-    int getCurrentRows() const
+    int getCurrentRows() 
     {
         return currentRows;
     }
 
-    int getCurrentCols() const
+    int getCurrentCols() 
     {
         return currentCols;
     }
 
-    bool getIsFirstColumnInt() const
+    bool getIsFirstColumnInt() 
     {
         return isFirstColumnInt;
     }
